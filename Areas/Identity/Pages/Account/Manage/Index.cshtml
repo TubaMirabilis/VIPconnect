@@ -1,0 +1,85 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Username" class="form-control" disabled />
+            </div>
+            <div class="form-group mb-3">
+                <label class="mb-1" asp-for="Input.SightCategory"></label>
+                <br />
+                <select class="w-100" asp-for="Input.SightCategory" asp-items="@(Model.SightCategories)">
+                    <option></option>
+                </select>
+                <span asp-validation-for="Input.SightCategory" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label class="mb-1" asp-for="Input.EmploymentStatus"></label>
+                <br />
+                <select class="w-100" asp-for="Input.EmploymentStatus" asp-items="@(Model.EmploymentStatuses)">
+                    <option></option>
+                </select>
+                <span asp-validation-for="Input.EmploymentStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label class="mb-1" asp-for="Input.JobTitle"></label>
+                <input asp-for="Input.JobTitle" class="form-control" />
+                <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label class="mb-1" asp-for="Input.Company"></label>
+                <input asp-for="Input.Company" class="form-control" />
+                <span asp-validation-for="Input.Company" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label class="mb-1" asp-for="Input.Industry"></label>
+                <input asp-for="Input.Industry" class="form-control" />
+                <span asp-validation-for="Input.Industry" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label class="mb-1" asp-for="Input.WorkRoles"></label>
+                <input asp-for="Input.WorkRoles" class="form-control" />
+                <span asp-validation-for="Input.WorkRoles" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label class="mb-1" asp-for="Input.Strengths"></label>
+                <input asp-for="Input.Strengths" class="form-control" />
+                <span asp-validation-for="Input.Strengths" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <fieldset>
+                    <legend>Are you a parent?</legend>
+                    <div>
+                        <input id="Yes" type="radio" asp-for="Input.IsParent" value="Yes" checked>
+                        <label for="Yes" asp-for="Input.IsParent">Yes</label>
+                    </div>
+                    <div>
+                        <input id="No" type="radio" asp-for="Input.IsParent" value="No" checked>
+                        <label for="No" asp-for="Input.IsParent">No</label>
+                    </div>
+                </fieldset>
+                <span asp-validation-for="Input.IsParent" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label class="mb-1" asp-for="Input.Biog"></label>
+                <input asp-for="Input.Biog" class="form-control" />
+                <span asp-validation-for="Input.Biog" class="text-danger"></span>
+            </div>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

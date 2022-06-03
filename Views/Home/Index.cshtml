@@ -1,0 +1,74 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<section class="d-flex position-relative justify-content-between align-items-center hero px-4 pb-md-6 mb-6 mb-md-4">
+    <div class="d-block d-md-none text-center hero__braille" role="img" alt="">⠮⠀⠕⠝⠇⠽⠀⠹⠬⠀⠺⠑<br />⠓⠀⠖⠋⠑⠜⠀⠊⠎<br />⠋⠑⠜⠀⠭⠋</div>
+    <h1 class="d-none d-md-block display-6" style="width: 21rem;">Sharing our<br/>brightest ideas for<br/>communal success</h1>
+    <div class="text-center hero__braille" role="img" alt="">⠮⠀⠕⠝⠇⠽⠀⠹⠬⠀⠺⠑<br />⠓⠀⠖⠋⠑⠜⠀⠊⠎<br />⠋⠑⠜⠀⠭⠋</div>
+    <div class="position-absolute bg-primary top-0 hero__triangle"></div>
+    <div class="position-absolute start-50 translate-middle text-center text-light hero__text">The best website of all time</div>
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <a class="btn position-absolute translate-middle hero__cta" asp-area="Identity" asp-page="/Account/Register">Sign Up</a>
+    }
+    else
+    {
+        <a class="btn position-absolute translate-middle hero__cta" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Your Account</a>
+    }
+</section>
+<section class="mb-6 mb-md-5 mx-1 mx-sm-0">
+    <form method="get" asp-controller="Discussions" asp-action="Index" class="row">
+        <div class="col-0 col-lg-3"></div>
+        <div class="form-group col-10 col-sm-11 col-lg-5">
+            <label for="searchPhrase" class="control-label"></label>
+            <input name="searchPhrase" placeholder="Search the ProjectX discussion archive" class="form-control" style="font-size: 0.75rem;" />
+        </div>
+        <button alt="Search" class="bg-primary col-2 col-sm-1 mt-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+        </button>
+        <div class="col-0 col-lg-3"></div>
+    </form>
+</section>
+<section class="mb-4">
+    <nav>
+        <div class="nav nav-tabs nav-pills nav-justified" id="nav-tab" role="tablist">
+            <button class="nav-link active fs-3 px-1 border border-dark rounded" id="nav-forums-tab" data-bs-toggle="tab" data-bs-target="#nav-forums" type="button" role="tab" aria-controls="nav-forums" aria-selected="true">Our Forums</button>
+            <button class="nav-link fs-3 border px-1 border-dark rounded" id="nav-recent-tab" data-bs-toggle="tab" data-bs-target="#nav-recent" type="button" role="tab" aria-controls="nav-recent" aria-selected="false">Recent Activity</button>
+            <button class="nav-link fs-3 border px-1 border-dark rounded" id="nav-start-tab" data-bs-toggle="tab" data-bs-target="#nav-start" type="button" role="tab" aria-controls="nav-start" aria-selected="false">Start Discussion</button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active pt-2 px-4 px-lg-6" id="nav-forums" role="tabpanel" aria-labelledby="nav-forums-tab">
+            @await Component.InvokeAsync("Forums")
+        </div>
+        <div class="tab-pane fade pt-2 px-4 px-lg-6" id="nav-recent" role="tabpanel" aria-labelledby="nav-recent-tab">
+            @await Component.InvokeAsync("Recent")
+        </div>
+        <div class="tab-pane fade pt-2 px-4 px-lg-6" id="nav-start" role="tabpanel" aria-labelledby="nav-start-tab">
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Banned") == false)
+            {
+            @await Component.InvokeAsync("New")
+            }
+            @if(User.IsInRole("Banned"))
+            {
+            <p class="text-center fs-2">Your account has reduced privileges at the moment.</p>
+            <p class="text-center fs-2">You can send us your unban request at your leisure.</p>
+            }
+            else
+            {
+            <p class="text-center fs-2">You must be signed in to start a discussion.</p>
+            }
+        </div>
+    </div>
+</section>
+<section class="mb-5">
+    <h1 class="display-6 text-center mb-4">Community Statistics</h1>
+    @await Component.InvokeAsync("Stats")
+</section>

@@ -1,0 +1,55 @@
+.hero {
+	border: 3px solid black;
+
+	&__triangle {
+		width: calc(100% - 3rem);
+		height: 150%;
+		clip-path: polygon(50% 0%, 10% 150%, 90% 150%);
+		@include media-breakpoint-up(md) {
+			height: 100%;
+			clip-path: polygon(65% 0%, 25% 150%, 105% 150%);
+		}
+	}
+	&__text {
+		display: none;
+		font-size: 1.25em;
+		line-height: 1.15;
+		top: 65%;
+		width: 12%;
+		@media (min-width: 456px) {
+			display: block;
+		}
+		@media (min-width: 768px) {
+			display: none;
+		}
+	}
+	&__cta {
+		top: 125%;
+		left: 50%;
+		padding: 4px 8px;
+		background-color: $light;
+		@media (min-width: 456px) {
+			top: 130%;
+			padding: 8px 32px;
+		}
+		@include media-breakpoint-up(md) {
+			top: 83%;
+			left: 5.5rem;
+			background-color: $primary;
+			color: $light;
+			&:hover{
+				color: $light;
+				opacity: 90%;
+			}
+		}
+	}
+	&__braille {
+		width: 11rem;
+		font-size: 0.625em;
+		color: cadetblue;
+		line-height: 2.5;
+		@media (min-width: 456px) {
+			font-size: 1.0625em;
+		}
+	}
+}

@@ -1,0 +1,44 @@
+@model ProjectX.ViewModels.ModViewModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@if(!(await UserManager.IsInRoleAsync(await UserManager.FindByNameAsync(Model.UserName), "Moderator") && User.IsInRole("Moderator")))
+{
+    @if(!await UserManager.IsInRoleAsync(await UserManager.FindByNameAsync(Model.UserName), "Banned"))
+    {
+        <li><a href="#" class="dropdown-item text-danger text-decoration-none" data-bs-toggle="modal" data-bs-target="#confirmModal">Ban User</a></li>
+    }
+    @if(await UserManager.IsInRoleAsync(await UserManager.FindByNameAsync(Model.UserName), "Banned"))
+    {
+        <li><a asp-controller="Roles" asp-action="UpdateSingle" asp-route-userName="@Model.UserName" asp-route-role="Unban" asp-route-id="@Model.DiscussionId" class="dropdown-item text-danger text-decoration-none">Unban User</a></li>
+    }
+}
+@if(User.IsInRole("Administrator"))
+{
+    @if(!await UserManager.IsInRoleAsync(await UserManager.FindByNameAsync(Model.UserName), "Banned") && !await UserManager.IsInRoleAsync(await UserManager.FindByNameAsync(Model.UserName), "Moderator"))
+    {
+        <li><a asp-controller="Roles" asp-action="UpdateSingle" asp-route-userName="@Model.UserName" asp-route-role="Moderator" asp-route-id="@Model.DiscussionId" class="dropdown-item text-danger text-decoration-none">Mod User</a></li>
+    }
+    @if(!await UserManager.IsInRoleAsync(await UserManager.FindByNameAsync(Model.UserName), "Banned") && await UserManager.IsInRoleAsync(await UserManager.FindByNameAsync(Model.UserName), "Moderator"))
+    {
+        <li><a asp-controller="Roles" asp-action="UpdateSingle" asp-route-userName="@Model.UserName" asp-route-role="Unmod" asp-route-id="@Model.DiscussionId" class="dropdown-item text-danger text-decoration-none">Unmod User</a></li>
+    }
+}
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true" aria-modal="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="h5 modal-title" id="confirmModalLabel">Ban Initiated</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Would you like to remove all of this user's contributions to the website?</p>
+                <p class="text-center">The content will not be restored if an unban action is carried out.</p>
+            </div>
+            <div class="modal-footer">
+                <a asp-controller="Roles" asp-action="UpdateSingle" asp-route-userName="@Model.UserName" asp-route-role="Banned" asp-route-batchDelete="@true" asp-route-id="@Model.DiscussionId" class="btn btn-danger">Yes</a>
+                <a asp-controller="Roles" asp-action="UpdateSingle" asp-route-userName="@Model.UserName" asp-route-role="Banned" asp-route-batchDelete="@false" asp-route-id="@Model.DiscussionId" class="btn btn-primary">No</a>
+            </div>
+        </div>
+    </div>
+</div>

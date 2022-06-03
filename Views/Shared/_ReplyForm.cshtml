@@ -1,0 +1,55 @@
+﻿@model ProjectX.Models.Reply
+@using System.Security.Claims
+@using Tweetinvi
+@inject TwitterClient TwitterClient;
+@{
+    var controller = Model.DiscussionId != null ? "Discussions" : Model.SupportTicketId != null ? "Support" : null;
+}
+
+<div class="mb-5">
+    <form method="post" asp-controller="@controller" asp-action="Comment">
+        <input asp-for="DiscussionId" type="hidden" />
+        <input asp-for="SupportTicketId" type="hidden" />
+        <input asp-for="Respondent" type="hidden" />
+        <div class="row px-3" style="height: 3.5rem">
+            <div class="d-none d-sm-flex justify-content-end align-items-center col-2">
+                @* If the user has the TwitterId claim try to show their twitter profile image, otherwise show the standard ProjectX alphabet badge: *@
+                @if(!string.IsNullOrEmpty(User.FindFirstValue("TwitterId")))
+                {
+                var src = await TwitterClient.GetImageAsync(User.FindFirstValue("TwitterId"));
+                <img class="rounded-circle" src="@src" />
+                }
+                else
+                {
+                <div class="position-relative bg-primary rounded-circle" style="height: 3.5rem; width: 3.5rem;">
+                    <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle display-6 text-light font-monospace fw-lighter">@User.Identity.Name[0]</div>
+                </div>
+                }
+            </div>
+            @if(controller == "Discussions")
+            {
+            <div class="col-9">
+                <textarea class="form-control h-100 w-100 fs-4" asp-for="Content" placeholder="Add a reply"></textarea>
+                <span asp-validation-for="Content"></span>
+            </div>
+            }
+            @if(controller == "Support" && !User.IsInRole("Administrator"))
+            {
+            <div class="col-9">
+                <textarea class="form-control h-100 w-100 fs-4" asp-for="Content" placeholder="Provide more information"></textarea>
+                <span asp-validation-for="Content"></span>
+            </div>
+            }
+            @if(controller == "Support" && User.IsInRole("Administrator"))
+            {
+            <div class="col-9">
+                <textarea class="form-control h-100 w-100 fs-4" asp-for="Content" placeholder="Add a reply"></textarea>
+                <span asp-validation-for="Content"></span>
+            </div>
+            }
+            <div class="col-3 col-sm-1">
+                <button class="btn btn-primary h-100" type="submit">Post Reply</button>
+            </div>
+        </div>
+    </form>
+</div>

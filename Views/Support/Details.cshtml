@@ -1,0 +1,116 @@
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using ProjectX.ViewModels
+@inject SignInManager<ApplicationUser> SignInManager
+@model ProjectX.Models.SupportTicket
+
+@* <h1>@Model.Subject</h1>
+<h1>@Model.Content</h1> *@
+<div class="row mb-4">
+    <div class="d-flex align-items-center flex-row flex-md-column col-12 col-md-3 gap-4 gap-md-0">
+        <div class="d-flex justify-content-center align-items-center flex-row flex-md-column">
+            <h2><a class="d-none d-md-block fs-3 text-dark text-decoration-none mb-1" asp-controller="Profiles" asp-action="Details" asp-route-user="@Model.Creator" asp-route-pageNumber="1">@Html.DisplayFor(model => model.Creator)</a></h2>
+            @if(!string.IsNullOrEmpty(Model.Image))
+            {
+            <img class="rounded-circle mb-md-3" style="height: clamp(3.5rem, 10vw + 1rem, 7rem); width: clamp(3.5rem, 10vw + 1rem, 7rem);" src="@Model.Image" />
+            }
+            else
+            {
+            <div class="align-self-center position-relative bg-primary rounded-circle mb-md-3" style="height: clamp(3.5rem, 10vw + 1rem, 7rem); width: clamp(3.5rem, 10vw + 1rem, 7rem);">
+                <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle text-light font-monospace lh-1" style="font-size: clamp(2.125rem, 10vw + 1rem, 5rem);">@Html.DisplayFor(model => model.Creator[0])</div>
+            </div>
+            }
+        </div>
+        <div class="d-flex flex-column flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center flex-row mb-2">
+                <h2><a class="d-block d-md-none lh-1 fs-3 text-dark text-decoration-none mt-2" asp-controller="Profiles" asp-action="Details" asp-route-user="@Model.Creator" asp-route-pageNumber="1">@Html.DisplayFor(model => model.Creator)</a></h2>
+                @if(SignInManager.IsSignedIn(User) && !User.IsInRole("Banned"))
+                {
+                <div id="dropdown" class="dropdown">
+                    <button class="btn btn-light lh-1 fs-6 dropdown-toggle mt-0" type="button" id="actionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                        Actions
+                    </button>
+                    <ul id="theList" class="dropdown-menu" aria-labelledby="actionsMenu">
+                    @if((User.IsInRole("Administrator") || User.IsInRole("Moderator")) && User.FindFirstValue(ClaimTypes.Name) != Model.Creator && Model.Creator != "Admin")
+                    {
+                        <li><a asp-controller="Support" asp-action="Delete" asp-route-id="@Model.Id" class="dropdown-item text-danger text-decoration-none">Delete</a></li>
+                        await Html.RenderPartialAsync("_ModPartial", new ModViewModel { UserName = Model.Creator, DiscussionId = Model.Id });
+                        @if(User.FindFirstValue(ClaimTypes.Name) == Model.Creator)
+                        {
+                            <li><a asp-controller="Support" asp-action="Delete" asp-route-id="@Model.Id" class="dropdown-item text-danger text-decoration-none">Delete</a></li>
+                        }
+                    }
+                    </ul>
+                </div>
+                }
+            </div>
+            <div>
+                <p class="d-block d-md-none w-100 lh-1 text-center">Posted @Html.DisplayFor(model => model.DateCreated)</p>
+            </div>
+        </div>
+    </div>
+    <div class="px-0 col-12 col-md-9">
+        <div class="d-none d-md-block w-100 text-center">Posted @Html.DisplayFor(model => model.DateCreated)</div>
+        <p id="p1" class="text-break px-4 py-2" style="white-space: pre-line;">@Html.DisplayFor(model => model.Content)</p>
+        <div id="div1"></div>
+    </div>
+</div>
+<hr />
+@if (SignInManager.IsSignedIn(User))
+{
+    await Html.RenderPartialAsync("_ReplyForm", new Reply { SupportTicketId = Model.Id });
+}
+@foreach (var reply in Model.Replies)
+{
+    <div class="row">
+        <div class="d-flex align-items-center flex-row flex-md-column col-12 col-md-3 gap-4 gap-md-0">
+            <div class="d-flex justify-content-center align-items-center flex-row flex-md-column">
+                <h2><a class="d-none d-md-block fs-3 text-dark text-decoration-none mb-1" asp-controller="Profiles" asp-action="Details" asp-route-user="@reply.Respondent" asp-route-pageNumber="1">@reply.Respondent</a></h2>
+                @if(!string.IsNullOrEmpty(reply.Image))
+                {
+                <img class="rounded-circle mb-md-3" style="height: clamp(3.5rem, 10vw + 1rem, 7rem); width: clamp(3.5rem, 10vw + 1rem, 7rem);" src="@reply.Image" />
+                }
+                else
+                {
+                <div class="position-relative bg-primary rounded-circle" style="height: clamp(3.5rem, 10vw + 1rem, 7rem); width: clamp(3.5rem, 10vw + 1rem, 7rem);">
+                    <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle text-light font-monospace lh-1" style="font-size: clamp(2.125rem, 10vw + 1rem, 5rem);">@reply.Respondent[0]</div>
+                </div>
+                }
+            </div>
+            <div class="d-flex flex-column flex-grow-1">
+                <div class="d-flex justify-content-between align-items-start flex-row mb-2">
+                    <h2><a class="d-block d-md-none lh-1 fs-3 text-dark text-decoration-none mt-2" asp-controller="Profiles" asp-action="Details" asp-route-user="@reply.Respondent" asp-route-pageNumber="1">@reply.Respondent</a></h2>
+                </div>
+                <div>
+                    <div class="d-block d-md-none w-100 text-center">Posted @reply.DateCreated</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-9">
+            <div class="d-none d-md-block w-100 text-center">Posted @reply.DateCreated</div>
+            <p class="text-break px-4 py-2" style="white-space: pre-line;">@reply.Content</p>
+        </div>
+    </div>
+    <hr />
+}
+@if(!Model.IsResolved)
+{
+<div class="d-flex justify-content-center align-items-center">
+    <a class="btn btn-primary" asp-controller="Support" asp-action="MarkAsResolved" asp-route-id="@Model.Id">Mark as Resolved</a>
+</div>
+}
+@if(Model.IsResolved && User.IsInRole("Administrator"))
+{
+<div class="d-flex justify-content-center align-items-center">
+    <a class="btn btn-danger" asp-controller="Support" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+</div>
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            if(($("#theList").has("li").length === 0)) {
+                $("#dropdown").remove();
+            }
+        });
+    </script>
+}

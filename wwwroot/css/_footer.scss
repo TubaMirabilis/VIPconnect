@@ -1,0 +1,97 @@
+.footer{
+    background-color: $primary;
+    color: $light;
+    padding: 2.5rem;
+    text-align: center;
+    .container{
+        @include media-breakpoint-up(lg){
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 3fr;
+            grid-template-rows: 1fr auto;
+            grid-template-areas: "logo links1 links2 cta"
+            "social links1 links2 copyright";
+            gap: 1rem;
+            justify-items: start;
+        }
+    }
+    a{
+        color: $light;
+        text-decoration: none;
+    }
+    &__logo{
+        display: inline-block;
+        @include media-breakpoint-down(lg){
+            margin-bottom: 0.5rem;
+        }
+        @include media-breakpoint-up(xl){
+            grid-area: logo;
+        }
+    }
+    &__social{
+        @include media-breakpoint-down(md){
+            margin-bottom: 1.875rem;
+        }
+        @include media-breakpoint-up(lg){
+            grid-area: social;
+            align-self: flex-end;
+        }
+        a{
+            display: inline-block;
+            height: 1.25rem;
+            svg path{
+                transition: fill 150ms ease-in-out;
+            }
+            &:hover svg path{
+                fill: black;
+            }
+        }
+        a:not(:last-child){
+            margin-right: 1rem;
+        }
+    }
+    &__links{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.9375rem;
+        @include media-breakpoint-up(lg){
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        &.col1{
+            @include media-breakpoint-up(lg){
+                grid-area: links1;
+            }
+        }
+        &.col2{
+            @include media-breakpoint-down(md){
+                margin-bottom: 1rem;
+            }
+            @include media-breakpoint-up(lg){
+                grid-area: links2;
+            }
+        }
+        a{
+            line-height: 2;
+        }
+    }
+    &__cta{
+        @include media-breakpoint-up(lg){
+            grid-area: cta;
+            text-align: right;
+            justify-self: end;
+        }
+        @include media-breakpoint-down(md){
+                margin-bottom: 1.875rem;
+        }
+    }
+    &__copyright{
+        font-size: 0.8125rem;
+        line-height: 2;
+        @include media-breakpoint-up(lg){
+            grid-area: copyright;
+            justify-self: end;
+            align-self: flex-end;
+        }
+    }
+}

@@ -1,0 +1,165 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container">
+    <h1 class="text-center mb-3">@ViewData["Title"]</h1>
+    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+            <div class="d-flex flex-column align-items-center mb-4">
+                <p class="text-center">Using either Google or Twitter as an external login provider means that there's no need to remember a separate password for ProjectX</p>
+                <p class="text-center">Registration using Twitter allows you to use your Twitter profile image as your user avatar here on the ProjectX website.</p>
+                <button type="submit" class="btn btn-primary w-50 my-3" name="provider" value="Google" title="Log in using your Google account">Register using Google</button>
+                <button type="submit" class="btn btn-primary w-50 my-3" name="provider" value="Twitter" title="Log in using your Twitter account">Register using Twitter</button>
+            </div>
+    </form>
+    <div>
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h2 class="fs-3 text-center">Create a local account</h2>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row mb-4">
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.Name"></label>
+                    <input asp-for="Input.Name" class="form-control" />
+                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.DateOfBirth"></label>
+                    <input asp-for="Input.DateOfBirth" class="form-control" />
+                    <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.SightCategory"></label>
+                    <br />
+                    <select class="w-100" asp-for="Input.SightCategory"
+                        asp-items="@(Model.SightCategories)">
+                        <option></option>
+                    </select>
+                    <span asp-validation-for="Input.SightCategory" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.EmploymentStatus"></label>
+                    <br />
+                    <select class="w-100" asp-for="Input.EmploymentStatus"
+                        asp-items="@(Model.EmploymentStatuses)">
+                        <option></option>
+                    </select>
+                    <span asp-validation-for="Input.EmploymentStatus" class="text-danger"></span>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.JobTitle"></label>
+                    <input asp-for="Input.JobTitle" class="form-control" />
+                    <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.Company"></label>
+                    <input asp-for="Input.Company" class="form-control" />
+                    <span asp-validation-for="Input.Company" class="text-danger"></span>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.Industry"></label>
+                    <input asp-for="Input.Industry" class="form-control" />
+                    <span asp-validation-for="Input.Industry" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.WorkingSince"></label>
+                    <input asp-for="Input.WorkingSince" class="form-control" />
+                    <span asp-validation-for="Input.WorkingSince" class="text-danger"></span>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.BreakTime"></label>
+                    <input asp-for="Input.BreakTime" class="form-control" />
+                    <span asp-validation-for="Input.BreakTime" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 align-self-end form-group mb-3">
+                    <label class="mb-1" asp-for="Input.WorkRoles"></label>
+                    <input asp-for="Input.WorkRoles" class="form-control" />
+                    <span asp-validation-for="Input.WorkRoles" class="text-danger"></span>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.Strengths"></label>
+                    <input asp-for="Input.Strengths" class="form-control" />
+                    <span asp-validation-for="Input.Strengths" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 align-self-center form-group mb-3">
+                    <fieldset>
+                        <legend>Are you a parent?</legend>
+                        <div>
+                            <input id="Yes" type="radio" asp-for="Input.IsParent" value="Yes" checked>
+                            <label for="Yes" asp-for="Input.IsParent">Yes</label>
+                        </div>
+                        <div>
+                            <input id="No" type="radio" asp-for="Input.IsParent" value="No" checked>
+                            <label for="No" asp-for="Input.IsParent">No</label>
+                        </div>
+                    </fieldset>
+                    <span asp-validation-for="Input.IsParent" class="text-danger"></span>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.Biog"></label>
+                    <input asp-for="Input.Biog" class="form-control" />
+                    <span asp-validation-for="Input.Biog" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group mb-3">
+                    <label class="mb-1" asp-for="Input.ConfirmPassword"></label>
+                    <input asp-for="Input.ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary px-6">Register</button>
+            </div>
+        </form>
+    </div>
+    @* <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h4>Use another service to register.</h4>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                            for details on setting up this ASP.NET application to support logging in via external services.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div> *@
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

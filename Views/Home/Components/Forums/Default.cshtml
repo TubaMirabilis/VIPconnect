@@ -1,0 +1,15 @@
+@model IEnumerable<ProjectX.Models.Category>
+
+@foreach (var c in Model)
+{
+    c.ImageSrc = "/img/" + c.ImageSrc;
+    <div class="d-flex border border-dark rounded px-4">
+        <div class="position-relative flex-shrink-0 align-self-center bg-primary rounded-circle feature__circle">
+            <img class="position-absolute top-50 start-50 translate-middle" src="@c.ImageSrc" alt="" />
+        </div>
+        <div class="mx-4">
+            <h2><a asp-controller="Discussions" asp-action="Index" asp-route-category="@c.Name" class="fs-4 text-dark text-decoration-none">@c.Name</a></h2>
+            <p>@c.Description</p>
+        </div>
+    </div>
+}

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ProjectX.Models.Discussion>
+@using Microsoft.AspNetCore.Identity
+@using Tweetinvi
+@inject TwitterClient TwitterClient
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (Model != null)
+{
+    @foreach (var item in Model)
+    {
+        var user = await UserManager.FindByNameAsync(item.Creator);
+        var claims = await UserManager.GetClaimsAsync(user);
+        <div class="d-flex border border-dark rounded px-4">
+            @if(claims.Any(c => c.Type == "TwitterId"))
+            {
+                var src = await TwitterClient.GetImageAsync(claims.FirstOrDefault(c => c.Type == "TwitterId").Value);
+                <img class="flex-shrink-0 align-self-center rounded-circle feature__circle" src="@src" />
+            }
+            else
+            {
+            <div class="position-relative flex-shrink-0 align-self-center bg-primary rounded-circle feature__circle">
+                <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle rounded-circle display-4 text-light font-monospace">@Html.DisplayFor(modelItem => item.Creator[0])</div>
+            </div>
+            }
+            <div class="ms-4">
+                <h2 class="fs-3 text-dark text-decoration-none">@Html.DisplayFor(modelItem => item.Creator) posted in @Html.DisplayFor(modelItem => item.Category)</h2>
+                <a class="fs-6 text-primary text-decoration-none" asp-controller="Discussions" asp-action="Details" asp-route-id="@item.Id" asp-route-pageNumber="1">@Html.DisplayFor(modelItem => item.Title)</a>
+                <p>@Html.DisplayFor(modelItem => item.Likes.Count) likes, @Html.DisplayFor(modelItem => item.Replies.Count) replies</p>
+            </div>
+        </div>
+    }
+}
+@if (Model == null)
+{
+    <p class="fs-4 text-center">No user content yet</p>
+}

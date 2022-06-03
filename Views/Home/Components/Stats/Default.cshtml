@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using System.Linq;
+@using Tweetinvi
+@inject TwitterClient TwitterClient
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Home Page";
+    ApplicationUser user = await UserManager.FindByNameAsync(ViewBag.Newest);
+    IList<Claim> claims = await UserManager.GetClaimsAsync(user);
+}
+<div class="d-flex flex-column flex-lg-row justify-content-between align-items-center feature">
+    <div class="d-flex justify-content-between align-items-center mb-2 mb-lg-0 border border-dark rounded feature__item">
+        <div class="position-relative bg-primary rounded-circle feature__circle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#fff" class="bi bi-people-fill position-absolute top-50 start-50 translate-middle" viewBox="0 0 16 16">
+                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z" />
+                <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+            </svg>
+        </div>
+        <div class="text-center feature__text">@ViewBag.Users<br />members</div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-2 mb-lg-0 border border-dark rounded feature__item">
+        <div class="position-relative bg-primary rounded-circle feature__circle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#fff" class="bi bi-pencil-fill position-absolute top-50 start-50 translate-middle" viewBox="0 0 16 16">
+                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+            </svg>
+        </div>
+        <div class="text-center feature__text">@ViewBag.Discussions<br />discussions</div>
+    </div>
+    @if (!string.IsNullOrEmpty(ViewBag.Newest))
+    {
+        <div class="d-flex justify-content-between align-items-center border border-dark rounded feature__item">
+            @if(claims.Any(c => c.Type == "TwitterId"))
+            {
+                var src = await TwitterClient.GetImageAsync(claims.FirstOrDefault(c => c.Type == "TwitterId").Value);
+                <img class="rounded-circle feature__circle" src="@src" />
+            }
+            else
+            {
+            <div class="position-relative bg-primary rounded-circle feature__circle">
+                <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle rounded-circle display-4 text-light font-monospace">@ViewBag.Newest[0]</div>
+            </div>
+            }
+            <div class="d-flex flex-column">
+                <div class="text-center feature__text">Newest Member:</div>
+                <a class="text-primary text-decoration-none text-center feature__text" asp-controller="Profiles" asp-action="Details" asp-route-user="@ViewBag.Newest" asp-route-pageNumber="1">@ViewBag.Newest</a>
+            </div>
+        </div>
+    }
+</div>

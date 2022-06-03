@@ -1,0 +1,31 @@
+@model ProjectX.Models.Category
+
+<h1>Create a New Forum</h1>
+
+<form asp-controller="Category" asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group mb-3">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="ImageSrc" class="control-label"></label>
+        <input asp-for="ImageSrc" class="form-control" />
+        <span asp-validation-for="ImageSrc" class="text-danger"></span>
+    </div>
+    <h2>Forum Badge Images</h2>
+    <ul>
+        <li>Place images in svg format into the wwwroot/img folder</li>
+        <li>Initially set the width and height tags of the svg to 36</li>
+        <li>If results are not satisfactory further sizing tweaks can be applied.</li>
+    </ul>
+    <div class="d-flex justify-content-center form-group">
+        <input type="submit" id="submit" value="Create" class="btn btn-primary px-6" />
+    </div>
+</form>

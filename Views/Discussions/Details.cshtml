@@ -1,0 +1,202 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using ProjectX.ViewModels
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model ProjectX.ViewModels.DetailsViewModel
+
+@{
+    ViewData["Title"] = @Model.Discussion.Title;
+}
+
+<h1 class="text-center text-sm-start my-4">@Html.DisplayFor(model => model.Discussion.Title)</h1>
+
+<div class="row mb-4">
+    <div class="d-flex align-items-center flex-row flex-md-column col-12 col-md-3 gap-4 gap-md-0">
+        <div class="d-flex justify-content-center align-items-center flex-row flex-md-column">
+            <h2><a class="d-none d-md-block fs-3 text-dark text-decoration-none mb-1" asp-controller="Profiles" asp-action="Details" asp-route-user="@Model.Discussion.Creator" asp-route-pageNumber="1">@Html.DisplayFor(model => model.Discussion.Creator)</a></h2>
+            @if(!string.IsNullOrEmpty(Model.Discussion.Image))
+            {
+            <img class="rounded-circle mb-md-3" style="height: clamp(3.5rem, 10vw + 1rem, 7rem); width: clamp(3.5rem, 10vw + 1rem, 7rem);" src="@Model.Discussion.Image" />
+            }
+            else
+            {
+            <div class="align-self-center position-relative bg-primary rounded-circle mb-md-3" style="height: clamp(3.5rem, 10vw + 1rem, 7rem); width: clamp(3.5rem, 10vw + 1rem, 7rem);">
+                <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle text-light font-monospace lh-1" style="font-size: clamp(2.125rem, 10vw + 1rem, 5rem);">@Html.DisplayFor(model => model.Discussion.Creator[0])</div>
+            </div>
+            }
+        </div>
+        <div class="d-flex flex-column flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center flex-row mb-2">
+                <h2><a class="d-block d-md-none lh-1 fs-3 text-dark text-decoration-none mt-2" asp-controller="Profiles" asp-action="Details" asp-route-user="@Model.Discussion.Creator" asp-route-pageNumber="1">@Html.DisplayFor(model => model.Discussion.Creator)</a></h2>
+                @if(SignInManager.IsSignedIn(User) && !User.IsInRole("Banned"))
+                {
+                <div id="dropdown" class="dropdown">
+                    <button class="btn btn-light lh-1 fs-6 dropdown-toggle mt-0" type="button" id="actionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                        Actions
+                    </button>
+                    <ul id="theList" class="dropdown-menu" aria-labelledby="actionsMenu">
+                    @if(User.FindFirstValue(ClaimTypes.Name) == Model.Discussion.Creator)
+                    {
+                        <li><a href="#" id="editNow" class="dropdown-item text-primary text-decoration-none">Edit</a></li>
+                        <li><a asp-controller="Discussions" asp-action="Delete" asp-route-id="@Model.Discussion.Id" class="dropdown-item text-danger text-decoration-none">Delete</a></li>
+                    }
+                    @if((User.IsInRole("Administrator") || User.IsInRole("Moderator")) && User.FindFirstValue(ClaimTypes.Name) != Model.Discussion.Creator && Model.Discussion.Creator != "Admin")
+                    {
+                        <li><a asp-controller="Discussions" asp-action="Delete" asp-route-id="@Model.Discussion.Id" class="dropdown-item text-danger text-decoration-none">Delete</a></li>
+                        await Html.RenderPartialAsync("_ModPartial", new ModViewModel { UserName = Model.Discussion.Creator, DiscussionId = Model.Discussion.Id });
+                        @if(User.FindFirstValue(ClaimTypes.Name) == Model.Discussion.Creator)
+                        {
+                            <li><a asp-controller="Discussions" asp-action="Delete" asp-route-id="@Model.Discussion.Id" class="dropdown-item text-danger text-decoration-none">Delete</a></li>
+                        }
+                    }
+                    </ul>
+                </div>
+                }
+            </div>
+            <div>
+                <p class="d-block d-md-none w-100 lh-1 text-center">Posted @Html.DisplayFor(model => model.Discussion.DateCreated)</p>
+            </div>
+        </div>
+    </div>
+    <div class="px-0 col-12 col-md-9">
+        <div class="d-none d-md-block w-100 text-center">Posted @Html.DisplayFor(model => model.Discussion.DateCreated)</div>
+        <p id="p1" class="d-inline-block text-break px-4 py-2" style="min-height: 65%; white-space: pre-line;">@Html.DisplayFor(model => model.Discussion.Content)</p>
+        <div id="div1"></div>
+        <div class="d-flex justify-content-center justify-content-sm-end">
+            <button data-id="@Model.Discussion.Id" type="button" class="btn btn-primary text-light like-button">
+                Like |
+                <span class="like-count">@Model.Discussion.Likes.Count</span>
+            </button>
+        </div>
+    </div>
+</div>
+<hr />
+@if (SignInManager.IsSignedIn(User) && User.IsInRole("Banned") == false)
+{
+    await Html.RenderPartialAsync("_ReplyForm", new Reply { DiscussionId = Model.Discussion.Id });
+}
+@foreach (var reply in Model.Replies)
+{
+    <div class="row">
+        <div class="d-flex align-items-center flex-row flex-md-column col-12 col-md-3 gap-4 gap-md-0">
+            <div class="d-flex justify-content-center align-items-center flex-row flex-md-column">
+                <h2><a class="d-none d-md-block fs-3 text-dark text-decoration-none mb-1" asp-controller="Profiles" asp-action="Details" asp-route-user="@reply.Respondent" asp-route-pageNumber="1">@reply.Respondent</a></h2>
+                @if(!string.IsNullOrEmpty(reply.Image))
+                {
+                <img class="rounded-circle mb-md-3" style="height: clamp(3.5rem, 10vw + 1rem, 7rem); width: clamp(3.5rem, 10vw + 1rem, 7rem);" src="@reply.Image" />
+                }
+                else
+                {
+                <div class="position-relative bg-primary rounded-circle" style="height: clamp(3.5rem, 10vw + 1rem, 7rem); width: clamp(3.5rem, 10vw + 1rem, 7rem);">
+                    <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle text-light font-monospace lh-1" style="font-size: clamp(2.125rem, 10vw + 1rem, 5rem);">@reply.Respondent[0]</div>
+                </div>
+                }
+            </div>
+            <div class="d-flex flex-column flex-grow-1">
+                <div class="d-flex justify-content-between align-items-start flex-row mb-2">
+                    <h2><a class="d-block d-md-none lh-1 fs-3 text-dark text-decoration-none mt-2" asp-controller="Profiles" asp-action="Details" asp-route-user="@reply.Respondent" asp-route-pageNumber="1">@reply.Respondent</a></h2>
+                    @if(User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+                    {
+                        <div id="replyDropdown" class="dropdown pt-md-2">
+                            <button class="btn btn-light lh-1 fs-6 dropdown-toggle mt-0" type="button" id="replyActionsMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul id="replyActionsList" class="dropdown-menu" aria-labelledby="replyActionsMenu">
+                            @if(User.FindFirstValue(ClaimTypes.Name) == reply.Respondent)
+                            {
+                                <li><a asp-controller="Discussions" asp-action="DeleteReply" asp-route-id="@reply.Id" class="dropdown-item text-danger text-decoration-none">Delete</a></li>
+                            }
+                            @if((User.IsInRole("Administrator") || User.IsInRole("Moderator")) && User.FindFirstValue(ClaimTypes.Name) != reply.Respondent && reply.Respondent != "Admin")
+                            {
+                                <li><a asp-controller="Discussions" asp-action="DeleteReply" asp-route-id="@reply.Id" class="dropdown-item text-danger text-decoration-none">Delete</a></li>
+                                await Html.RenderPartialAsync("_ModPartial", new ModViewModel { UserName = reply.Respondent, DiscussionId = Model.Discussion.Id });
+                                @if(User.FindFirstValue(ClaimTypes.Name) == reply.Respondent)
+                                {
+                                <li><a asp-controller="Discussions" asp-action="DeleteReply" asp-route-id="@reply.Id" class="dropdown-item text-danger text-decoration-none">Delete</a></li>
+                                }
+                            }
+                            </ul>
+                        </div>
+                    }
+                </div>
+                <div>
+                    <div class="d-block d-md-none w-100 text-center">Posted @reply.DateCreated</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-9">
+            <div class="d-none d-md-block w-100 text-center">Posted @reply.DateCreated</div>
+            <p class="text-break px-4 py-2" style="white-space: pre-line;">@reply.Content</p>
+        </div>
+    </div>
+    <hr />
+}
+@if (Model.PageCount > 1)
+{
+    <div class="footer d-flex justify-content-center align-items-center  gap-3 bg-light">
+        @if (Model.PageNumber > 1)
+        {
+            <a class="text-primary" asp-controller="Discussions" asp-action="Details" asp-route-id="@Model.Discussion.Id" asp-route-pageNumber="1">◂ First</a>
+        }
+        @foreach (var num in Model.PageNumbers)
+        {
+            if (num > Model.PageCount)
+            {
+                break;
+            }
+            string linkStyle = num == Model.PageNumber ? "text-light bg-primary" : "text-primary";
+            string alt = num == Model.PageNumber ? "selected" : "";
+            <a class="@linkStyle px-3" aria-label="@alt @num" asp-controller="Discussions" asp-action="Details" asp-route-id="@Model.Discussion.Id" asp-route-pageNumber="@num">@num</a>
+        }
+        @if (Model.HasMore)
+        {
+            <a class="text-primary" asp-controller="Discussions" asp-action="Details" asp-route-category="@Model.Discussion.Id" asp-route-pageNumber="@Model.PageCount">Last ▸</a>
+        }
+    </div>
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#editNow").click(function () {
+                $("#div1").load("@(Url.Action("Edit","Discussions", new { id = @Model.Discussion.Id }))");
+                $("#p1").remove();
+                $("#editNow").remove();
+                $(".like-button").remove();
+            });
+            if(($("#theList").has("li").length === 0)) {
+                $("#dropdown").remove();
+            }
+            if(($("#replyActionsList").has("li").length === 0)) {
+                $("#replyDropdown").remove();
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".modal").each(function (){
+                $(this).insertBefore($(this).parent());
+            });
+        });
+    </script>
+    <script>
+        "use strict";
+        var $connection = new signalR.HubConnectionBuilder().withUrl("/likeHub").build();
+        $(".like-button").prop("disabled", true);
+        $connection.on("ReceiveMessage", function (numOfLikes, id) {
+            $(".like-count").text(numOfLikes);
+        });
+        $connection.start().then(function () {
+            $(".like-button").prop("disabled", false);
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+        $(".like-button").bind("click", function (event) {
+            var id = $(this).attr("data-id");
+            $connection.invoke("SetLike", id).catch(function (err) {
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        });
+    </script>
+}

@@ -1,0 +1,45 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "Support";
+}
+
+<h1 class="fs-1 text-center mb-4 mb-lg-6">Support Page</h1>
+<p class="text-center mb-4">We have set up our own Support Center to help members resolve difficulties that they are encountering on the website.</p>
+@if(SignInManager.IsSignedIn(User))
+{
+<p class="text-center mb-4">Use the tabs below to initiate a new support request or review help offered subsequent to previous requests.</p>
+<section>
+    <nav>
+        <div class="nav nav-tabs nav-pills nav-justified" id="nav-tab" role="tablist">
+            <button class="nav-link active fs-3 px-1 border border-dark rounded" id="nav-open-tab" data-bs-toggle="tab" data-bs-target="#nav-open" type="button" role="tab" aria-controls="nav-open" aria-selected="true">Active</button>
+            <button class="nav-link fs-3 border px-1 border-dark rounded" id="nav-resolved-tab" data-bs-toggle="tab" data-bs-target="#nav-resolved" type="button" role="tab" aria-controls="nav-resolved" aria-selected="false">Resolved</button>
+            <button class="nav-link fs-3 border px-1 border-dark rounded" id="nav-start-tab" data-bs-toggle="tab" data-bs-target="#nav-start" type="button" role="tab" aria-controls="nav-start" aria-selected="false">Create New</button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active pt-2 px-4 px-lg-6" id="nav-open" role="tabpanel" aria-labelledby="nav-open-tab">
+            @await Component.InvokeAsync("Active")
+        </div>
+        <div class="tab-pane fade pt-2 px-4 px-lg-6" id="nav-resolved" role="tabpanel" aria-labelledby="nav-resolved-tab">
+            @await Component.InvokeAsync("Resolved")
+        </div>
+        <div class="tab-pane fade pt-2 px-4 px-lg-6" id="nav-start" role="tabpanel" aria-labelledby="nav-start-tab">
+            @{
+                await Html.RenderPartialAsync("Create", new SupportTicket());
+            }
+        </div>
+    </div>
+</section>
+}
+else
+{
+    <p class="text-center mb-4">You'll need to log into your account before you can submit support requests.  Write to admin@projectx.net with full details of your situation if you're unable to regisster or unable to complete email account varification.</p>
+    <div class="d-flex justify-content-center mb-0 mb-md-7 mb-lg-0">
+        <div class="d-flex flex-column flex-md-row gap-4 w-50">
+            <a class="btn btn-primary flex-fill">Log in</a>
+            <a class="btn btn-primary flex-fill" asp-controller="Home" asp-action="Index">ProjectX Homepage</a>
+        </div>
+    </div>
+}

@@ -1,0 +1,59 @@
+﻿@model ProjectX.ViewModels.IndexViewModel
+
+@{
+    string[] words = ViewBag.Category.Split();
+    var twoWords = words.Take(2);
+    string twoWordsTogether = string.Join(" ", twoWords);
+    ViewData["Title"] = twoWordsTogether;
+}
+
+<h1 class="text-center mb-4">@ViewBag.Category</h1>
+@if(!Model.Discussions.Any())
+{
+    <p class="text-center fs-5">No relevant discussions found.</p>
+}
+<div class="row px-1 mb-5">
+    @foreach (var item in Model.Discussions)
+    {
+        <div class="d-flex col-12 col-md-6 border border-dark rounded px-4 mb-1">
+            @if(!string.IsNullOrEmpty(item.Image))
+            {
+                <img class="flex-shrink-0 align-self-center rounded-circle feature__circle" src="@item.Image" />
+            }
+            else
+            {
+            <div class="position-relative flex-shrink-0 align-self-center bg-primary rounded-circle feature__circle">
+                <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle rounded-circle display-4 text-light font-monospace">@Html.DisplayFor(modelItem => item.Creator[0])</div>
+            </div>
+            }
+            <div class="ms-4">
+                <h2 class="fs-3 text-dark text-decoration-none">@Html.DisplayFor(modelItem => item.Creator) posted in @item.Category</h2>
+                <a asp-action="Details" asp-route-id="@item.Id" asp-route-pageNumber="1" class="fs-6 text-primary text-decoration-none">@Html.DisplayFor(modelItem => item.Title)</a>
+                <p>0 likes, @Html.DisplayFor(modelItem => item.Replies.Count) replies</p>
+            </div>
+        </div>
+    }
+</div>
+@if (Model.PageCount > 1)
+{
+    <div class="footer d-flex justify-content-center align-items-center  gap-3 bg-light">
+        @if (Model.PageNumber > 1)
+        {
+            <a class="text-primary" asp-controller="Discussions" asp-action="Index" asp-route-category="@Model.Category" asp-route-pageNumber="1">◂ First</a>
+        }
+        @foreach (var num in Model.PageNumbers)
+        {
+            if (num > Model.PageCount)
+            {
+                break;
+            }
+            string linkStyle = num == Model.PageNumber ? "text-light bg-primary" : "text-primary";
+            string alt = num == Model.PageNumber ? "selected" : "";
+            <a class="@linkStyle px-3" aria-label="@alt @num" asp-controller="Discussions" asp-action="Index" asp-route-category="@Model.Category" asp-route-pageNumber="@num">@num</a>
+        }
+        @if (Model.HasMore)
+        {
+            <a class="text-primary" asp-controller="Discussions" asp-action="Index" asp-route-category="@Model.Category" asp-route-pageNumber="@Model.PageCount">Last ▸</a>
+        }
+    </div>
+}

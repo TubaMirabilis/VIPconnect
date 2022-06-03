@@ -1,0 +1,23 @@
+@* This will eventually serve to batch process user role changes. *@
+@* @using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model ProjectX.Models.NameRolePair
+
+@{
+    var roles = new List<SelectListItem>
+        {
+            new SelectListItem {Value = "", Text = ""},
+            new SelectListItem {Value = "Banned", Text = "Banned"}
+        };
+    if (User.IsInRole("Administrator"))
+    {
+        roles.Add(new SelectListItem {Value = "Moderator", Text = "Moderator"});
+    }
+}
+
+<div class="d-flex justify-content-between align-items-center">
+    @Html.DisplayFor(model => model.Name)
+    <input asp-for="Name" type="hidden" />
+    <select asp-for="Role" asp-items="@roles"></select>
+</div> *@

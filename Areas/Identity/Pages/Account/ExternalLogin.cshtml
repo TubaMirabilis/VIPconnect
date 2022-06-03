@@ -1,0 +1,116 @@
+﻿@page
+@model ExternalLoginModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h4 id="external-login-title">Associate Your @Model.ProviderDisplayName Account</h4>
+<hr />
+
+<p id="external-login-description" class="text-dark">
+    You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
+    Please complete the registration form and click the Register button to
+    complete the registration process.
+</p>
+
+<div class="container">
+    <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row mb-4">
+            <div class="col-md-6 form-group mb-3">
+                <label class="mb-1" asp-for="Input.UserName"></label>
+                <input asp-for="Input.UserName" class="form-control" />
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label class="mb-1" asp-for="Input.DateOfBirth"></label>
+                <input asp-for="Input.DateOfBirth" class="form-control" />
+                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-6 form-group mb-3">
+                <label class="mb-1" asp-for="Input.SightCategory"></label>
+                <br />
+                <select class="w-100" asp-for="Input.SightCategory"
+                        asp-items="@(Model.SightCategories)">
+                    <option></option>
+                </select>
+                <span asp-validation-for="Input.SightCategory" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label class="mb-1" asp-for="Input.EmploymentStatus"></label>
+                <br />
+                <select class="w-100" asp-for="Input.EmploymentStatus"
+                        asp-items="@(Model.EmploymentStatuses)">
+                    <option></option>
+                </select>
+                <span asp-validation-for="Input.EmploymentStatus" class="text-danger"></span>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-6 form-group mb-3">
+                <label class="mb-1" asp-for="Input.JobTitle"></label>
+                <input asp-for="Input.JobTitle" class="form-control" />
+                <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label class="mb-1" asp-for="Input.Company"></label>
+                <input asp-for="Input.Company" class="form-control" />
+                <span asp-validation-for="Input.Company" class="text-danger"></span>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-6 form-group mb-3">
+                <label class="mb-1" asp-for="Input.Industry"></label>
+                <input asp-for="Input.Industry" class="form-control" />
+                <span asp-validation-for="Input.Industry" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label class="mb-1" asp-for="Input.WorkingSince"></label>
+                <input asp-for="Input.WorkingSince" class="form-control" />
+                <span asp-validation-for="Input.WorkingSince" class="text-danger"></span>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-6 form-group mb-3">
+                <label class="mb-1" asp-for="Input.BreakTime"></label>
+                <input asp-for="Input.BreakTime" class="form-control" />
+                <span asp-validation-for="Input.BreakTime" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 align-self-end form-group mb-3">
+                <label class="mb-1" asp-for="Input.WorkRoles"></label>
+                <input asp-for="Input.WorkRoles" class="form-control" />
+                <span asp-validation-for="Input.WorkRoles" class="text-danger"></span>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-6 form-group mb-3">
+                <label class="mb-1" asp-for="Input.Strengths"></label>
+                <input asp-for="Input.Strengths" class="form-control" />
+                <span asp-validation-for="Input.Strengths" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 align-self-center form-group mb-3">
+                <fieldset>
+                    <legend>Are you a parent?</legend>
+                    <div>
+                        <input id="Yes" type="radio" asp-for="Input.IsParent" value="Yes" checked>
+                        <label for="Yes" asp-for="Input.IsParent">Yes</label>
+                    </div>
+                    <div>
+                        <input id="No" type="radio" asp-for="Input.IsParent" value="No">
+                        <label for="No" asp-for="Input.IsParent">No</label>
+                    </div>
+                </fieldset>
+                <span asp-validation-for="Input.IsParent" class="text-danger"></span>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-12 form-group mb-3">
+                <label class="mb-1" asp-for="Input.Biog"></label>
+                <input asp-for="Input.Biog" class="form-control" />
+                <span asp-validation-for="Input.Biog" class="text-danger"></span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
