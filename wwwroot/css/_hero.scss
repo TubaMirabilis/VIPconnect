@@ -1,5 +1,5 @@
 .hero {
-	border: 3px solid black;
+	border: 3px solid $primary;
 
 	&__triangle {
 		width: calc(100% - 3rem);

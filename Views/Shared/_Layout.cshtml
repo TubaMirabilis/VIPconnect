@@ -15,7 +15,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
             <div class="container-sm">
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                  <img src="@Url.Content("~/img/logo.jpg")" />
+                  <img src="@Url.Content("~/img/logo.jpg")" alt="Blink"/>
                 </a>
                 <button class="navbar-toggler hamburger-button" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@
                             <a class="nav-link" asp-controller="Home" asp-action="Rules">Rules</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Blog</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Blog">Blog</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Support" asp-action="Index">Support</a>
@@ -89,19 +89,19 @@
           </a>
         </div>
         <div class="footer__links col1">
-          <a href="#">About Us</a>
-          <a href="#">Contact</a>
-          <a href="#">Blog</a>
+          <a asp-controller="Home" asp-action="About">About Us</a>
+          <a asp-controller="Discussions" asp-action="Index">What's New</a>
+          <a asp-controller="Home" asp-action="Blog">Blog</a>
         </div>
         <div class="footer__links col2">
-          <a href="#">Code of Conduct</a>
-          <a href="#">Support</a>
-          <a href="#">Privacy Policy</a>
+          <a asp-controller="Home" asp-action="Rules">Code of Conduct</a>
+          <a asp-controller="Support" asp-action="Index">Support</a>
+          <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
         </div>
         <div class="footer__cta">
           @if(!SignInManager.IsSignedIn(User))
           {
-          <a class="btn btn-light text-primary" asp-area="Identity" asp-page="/Account/Register">Join ProjectX</a>
+          <a class="btn btn-light text-primary" asp-area="Identity" asp-page="/Account/Register">Join Blink</a>
           }
           else
           {
@@ -109,7 +109,7 @@
           }
         </div>
         <div class="footer__copyright">
-          &copy; ProjectX. All Rights Reserved
+          &copy; Blink. All Rights Reserved
         </div>
       </div>
     </footer>

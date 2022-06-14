@@ -29,6 +29,7 @@
     }
     &__social{
         @include media-breakpoint-down(md){
+            margin-top: 1.875rem;
             margin-bottom: 1.875rem;
         }
         @include media-breakpoint-up(lg){

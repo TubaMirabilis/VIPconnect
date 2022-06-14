@@ -12394,7 +12394,7 @@ fieldset:disabled .btn {
 }
 
 .hero {
-  border: 3px solid black;
+  border: 3px solid #B623FA;
 }
 
 .hero__triangle {
@@ -12531,6 +12531,7 @@ fieldset:disabled .btn {
 
 @media (max-width: 767.98px) {
   .footer__social {
+    margin-top: 1.875rem;
     margin-bottom: 1.875rem;
   }
 }
