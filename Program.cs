@@ -20,10 +20,20 @@ builder.Configuration.AddEnvironmentVariables(prefix: "PROJECTX_");
 var connectionstring = builder.Configuration["Authentication:AzureSQL:ConnectionString"];
 var client = new TwitterClient(builder.Configuration["Authentication:Twitter:ConsumerAPIKey"], builder.Configuration["Authentication:Twitter:ConsumerSecret"]);
 await client.Auth.InitializeClientBearerTokenAsync();
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+if(builder.Environment.IsDevelopment())
 {
-    options.UseSqlServer(connectionstring);
-});
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    {
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    });
+}
+else
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    {
+        options.UseSqlServer(connectionstring);
+    });
+}
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
