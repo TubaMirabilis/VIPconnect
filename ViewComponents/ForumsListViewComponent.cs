@@ -16,7 +16,7 @@ namespace ProjectX.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View(await _unitOfWork.CategoryRepository.Get(pageSize: int.MaxValue));
+            return View(await _unitOfWork.CategoryRepository.Get(orderBy: x => x.OrderBy(x => x.DateCreated), pageSize: int.MaxValue));
         }
     }
 }
