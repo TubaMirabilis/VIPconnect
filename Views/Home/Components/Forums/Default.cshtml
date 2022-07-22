@@ -2,12 +2,12 @@
 
 @foreach (var c in Model)
 {
-    c.ImageSrc = "/img/" + c.ImageSrc;
-    <div class="d-flex border border-dark rounded px-4">
-        <div class="position-relative flex-shrink-0 align-self-center bg-primary rounded-circle feature__circle">
-            <img class="position-absolute top-50 start-50 translate-middle" src="@c.ImageSrc" alt="" />
+    c.ImageSrc = "/img/" + c.ImageSrc + "#Layer_1";
+    <div class="d-flex border border-dark rounded">
+        <div class="align-self-center position-relative bg-primary rounded-circle mx-2 feature__circle feature__circle--lg">
+            <svg class="position-absolute top-50 start-50 translate-middle feature__image feature__image--lg"><use xlink:href="@c.ImageSrc"></use></svg>
         </div>
-        <div class="mx-4">
+        <div class="flex-fill">
             <h2><a asp-controller="Discussions" asp-action="Index" asp-route-category="@c.Name" class="fs-4 text-dark text-decoration-none">@c.Name</a></h2>
             <p>@c.Description</p>
         </div>

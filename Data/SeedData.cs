@@ -33,7 +33,7 @@ namespace ProjectX.Data
                 user = new ApplicationUser
                 {
                     UserName = userName,
-                    Email = "admin@projectx.net",
+                    Email = "admin@theblink.network",
                     DateOfBirth = new DateTime(1994, 11, 18),
                     SightCategory = "Light Perception",
                     EmploymentStatus = "Working full-time",

@@ -1,14 +1,24 @@
 .feature {
-	&__item {
-		width: 18.875rem;
-		height: 5rem;
-		padding: 1.5rem 2rem 1.5rem 1rem;
-	}
 	&__circle {
-		width: 4rem;
-		height: 4rem;
+		&--sm {
+			width: clamp(1rem, 5vw, 4rem);
+			aspect-ratio: 1;
+		}
+		&--lg {
+			width: clamp(2.75rem, 5vw, 4rem);
+			aspect-ratio: 1;
+		}
 	}
-	&__text {
-		width: 10rem;
+	&__image {
+		fill: white;
+		&--sm {
+			width: clamp(0.75rem, 3vw, 2.75rem);
+		}
+		&--lg {
+			width: clamp(1.5rem, 3vw, 2.75rem);
+		}
+	}
+	&__initial {
+		font-size: clamp(1.25rem, 5vw, 4rem);
 	}
 }
