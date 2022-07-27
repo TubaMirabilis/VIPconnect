@@ -12535,14 +12535,16 @@ fieldset:disabled .btn {
   }
 }
 
-.feature__circle--sm {
-  width: clamp(1rem, 5vw, 4rem);
+.feature__circle {
   aspect-ratio: 1;
 }
 
+.feature__circle--sm {
+  width: clamp(1rem, 5vw, 4rem);
+}
+
 .feature__circle--lg {
-  width: clamp(2.75rem, 5vw, 4rem);
-  aspect-ratio: 1;
+  width: clamp(2.75rem, 3vw, 4rem);
 }
 
 .feature__image {

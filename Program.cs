@@ -68,6 +68,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.ConsumerKey = builder.Configuration["Authentication:Twitter:ConsumerAPIKey"];
     options.ConsumerSecret = builder.Configuration["Authentication:Twitter:ConsumerSecret"];
+    options.RetrieveUserDetails = true;
 });
 builder.Services.Configure<SecurityStampValidatorOptions>(options =>
 {

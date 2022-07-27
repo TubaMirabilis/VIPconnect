@@ -1,12 +1,11 @@
 .feature {
 	&__circle {
+		aspect-ratio: 1;
 		&--sm {
 			width: clamp(1rem, 5vw, 4rem);
-			aspect-ratio: 1;
 		}
 		&--lg {
-			width: clamp(2.75rem, 5vw, 4rem);
-			aspect-ratio: 1;
+			width: clamp(2.75rem, 3vw, 4rem);
 		}
 	}
 	&__image {

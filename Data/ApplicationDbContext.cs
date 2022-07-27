@@ -41,6 +41,20 @@ namespace ProjectX.Data
             }, new Category
             {
                 Id = Guid.NewGuid(),
+                Name = "Job-hunting",
+                Description = "For job application advice.",
+                ImageSrc = "hunting.svg",
+                DateCreated = DateTime.UtcNow
+            }, new Category
+            {
+                Id = Guid.NewGuid(),
+                Name = "Access to Work",
+                Description = "A forum for discussing the UK Government scheme of the same name.",
+                ImageSrc = "universal-access-circle.svg",
+                DateCreated = DateTime.UtcNow
+            }, new Category
+            {
+                Id = Guid.NewGuid(),
                 Name = "Parents' Zone",
                 Description = "For parents to discuss maternal/paternal stuff.",
                 ImageSrc = "parents-child.svg",
