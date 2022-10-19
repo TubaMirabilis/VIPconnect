@@ -13,6 +13,12 @@
             visibility: hidden;
         }
     }
+    .dropdown-menu {
+        font-size: 1.4375em;
+        @include media-breakpoint-down(lg) {
+            text-align: center;
+        }
+    }
     
     .animated-icon {
         width: 30px;
@@ -44,7 +50,7 @@
             -moz-transition: .25s ease-in-out;
             -o-transition: .25s ease-in-out;
             transition: .25s ease-in-out;
-            background: #000;
+            background-color: $primary;
         }
         > span:nth-child(1) {
             top: 0px;
@@ -68,6 +74,12 @@
             transform-origin: left center;
         }
         &.open {
+            > span {
+                background-color: white;
+                -webkit-transition: background-color 350ms ease-in-out;
+                -ms-transition: background-color 350ms ease-in-out;
+                transition: background-color 350ms ease-in-out;
+            }
             > span:nth-child(1) {
                 -webkit-transform: rotate(45deg);
                 -moz-transform: rotate(45deg);

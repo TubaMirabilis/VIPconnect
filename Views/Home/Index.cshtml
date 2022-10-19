@@ -5,23 +5,27 @@
     ViewData["Title"] = "Home Page";
 }
 
-
-<section class="d-flex justify-content-between flex-column flex-md-row hero px-4 pb-md-2 mb-6 mb-md-4">
+<section class="d-flex justify-content-between flex-column flex-lg-row hero px-4 pb-md-2 mb-6 mb-md-4 gap-lg-5">
     <div class="d-flex justify-content-center justify-content-lg-start flex-column my-5">
-        <h1 class="d-block display-3 text-center text-md-start mb-5">Sharing our brightest ideas for communal success</h1>
+        <h1 class="d-block d-xxl-none display-5 text-center text-lg-start mb-5">About Blink</h1>
+        <h1 class="d-none d-xxl-block display-3 text-center text-lg-start mb-5">About Blink</h1>
+        <p class="mb-4">We’re a network of likeminded blind and visually impaired users, all looking for better ways of nailing life. We have topical pages including for job hunting and access to work, office workarounds and parenting, with more being added all the time. If you’re new here, why not get started by signing up and posting about yourself on our introductions page?</p>
+        <p class="mb-5">We want Blink to be civil and constructive, and a safe place for people to ask questions and grow and learn. We have a strict set of rules, and are always on the lookout for moderators to help keep the place in order. Everyone with any visual impairment is welcome here; opinions should be respected and content that could cause harm will be reviewed and removed if necessary. For more information, see our <a class="text-decoration-none" asp-controller="Home" asp-action="Rules">rules page.</a></p>
         @if (!SignInManager.IsSignedIn(User))
         {
-            <a class="btn btn-primary px-6 ms-auto ms-md-0 me-auto" asp-area="Identity" asp-page="/Account/Register">Sign Up</a>
+            <a class="btn btn-primary px-6 ms-auto ms-lg-0 me-auto" asp-area="Identity" asp-page="/Account/Register">Sign Up</a>
         }
         else
         {
-            <a class="btn btn-primary px-6 ms-auto ms-md-0 me-auto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Your Account</a>
+            <a class="btn btn-primary px-6 ms-auto ms-lg-0 me-auto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Your Account</a>
         }
     </div>
-    <img src="@Url.Content("~/img/logo-md.jpg")" class="d-block d-lg-none mb-4 align-self-center"
-        style="aspect-ratio: 66.67%; height: 50%;"/>
-    <img src="@Url.Content("~/img/logo-lg.jpg")" class="d-none d-lg-block align-self-center"
-        style="aspect-ratio: 66.67%; height: 50%;"/>
+    <img src="@Url.Content("~/img/logo.png")" class="d-block d-sm-none mb-4 align-self-center"
+        style="aspect-ratio: 66.67%;"/>
+    <img src="@Url.Content("~/img/logo-md.png")" class="d-none d-sm-block d-xxl-none mb-4 align-self-center"
+        style="aspect-ratio: 66.67%;"/>
+    <img src="@Url.Content("~/img/logo-lg.png")" class="d-none d-xxl-block align-self-center"
+        style="aspect-ratio: 66.67%;"/>
 </section>
 <section class="mb-6 mb-md-5 mx-1 mx-sm-0">
     <form method="get" asp-controller="Discussions" asp-action="Index" class="row">
@@ -54,7 +58,11 @@
             @await Component.InvokeAsync("Recent")
         </div>
         <div class="tab-pane fade pt-2 px-4 px-lg-6" id="nav-start" role="tabpanel" aria-labelledby="nav-start-tab">
-            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Banned") == false)
+            @if(!SignInManager.IsSignedIn(User))
+            {
+            <p class="text-center fs-2">You must be signed in to start a discussion.</p>
+            }
+            @if (SignInManager.IsSignedIn(User) && !User.IsInRole("Banned"))
             {
             @await Component.InvokeAsync("New")
             }
@@ -62,10 +70,6 @@
             {
             <p class="text-center fs-2">Your account has reduced privileges at the moment.</p>
             <p class="text-center fs-2">You can send us your unban request at your leisure.</p>
-            }
-            else
-            {
-            <p class="text-center fs-2">You must be signed in to start a discussion.</p>
             }
         </div>
     </div>

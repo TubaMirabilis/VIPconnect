@@ -3,7 +3,55 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+<script src="~/js/badwords.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function (event) {
+        var filter = new Filter();
+        $('#submit').prop('disabled', true);
+        $('#title').on('input change', function() {
+            if($('#category').val() == '') {
+                return
+            }
+            if($('#content').val() == '' || filter.isProfane($('#content').val())) {
+                return
+            }
+            if($(this).val() != '') {
+                $('#submit').prop('disabled', false);
+            }
+            if($(this).val() == '' || filter.isProfane($(this).val())) {
+                $('#submit').prop('disabled', true);
+            }
+        });
+        $('#category').on('input change', function() {
+            if($('#title').val() == '') {
+                return
+            }
+            if($('#content').val() == '') {
+                return
+            }
+            if($(this).val() != '') {
+                $('#submit').prop('disabled', false);
+            }
+            if($(this).val() == '') {
+                $('#submit').prop('disabled', true);
+            }
+        });
+        $('#content').on('input change', function() {
+            if($('#title').val() == '' || filter.isProfane($('#title').val())) {
+                return
+            }
+            if($('#category').val() == '') {
+                return
+            }
+            if($(this).val() != '') {
+                $('#submit').prop('disabled', false);
+            }
+            if($(this).val() == '' || filter.isProfane($(this).val())) {
+                $('#submit').prop('disabled', true);
+            }
+        });
+    });
+</script>
 <h1>Create Discussion</h1>
 
 <div class="row">
@@ -12,13 +60,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group mb-3">
                 <label asp-for="Discussion.Title" class="control-label"></label>
-                <input asp-for="Discussion.Title" class="form-control" />
+                <input id="title" asp-for="Discussion.Title" class="form-control" />
                 <span asp-validation-for="Discussion.Title" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Discussion.Category" class="control-label"></label>
                 <br />
-                <select class="w-100" asp-for="Discussion.Category"
+                <select id="category" class="w-100" asp-for="Discussion.Category"
                         asp-items="@Model.Categories">
                     <option></option>
                 </select>
@@ -26,7 +74,7 @@
             </div>
             <div class="form-group mb-4">
                 <label asp-for="Discussion.Content" class="control-label"></label>
-                <textarea asp-for="Discussion.Content" class="form-control" style="height: 12rem;"></textarea>
+                <textarea id="content" asp-for="Discussion.Content" class="form-control" style="height: 12rem;"></textarea>
                 <span asp-validation-for="Discussion.Content" class="text-danger"></span>
             </div>
             <div class="d-flex justify-content-center form-group">

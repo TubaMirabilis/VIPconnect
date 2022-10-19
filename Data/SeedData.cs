@@ -34,15 +34,16 @@ namespace ProjectX.Data
                 {
                     UserName = userName,
                     Email = "admin@theblink.network",
+                    EmailConfirmed = true,
                     DateOfBirth = new DateTime(1994, 11, 18),
                     SightCategory = "Light Perception",
                     EmploymentStatus = "Working full-time",
                     JobTitle = "Administrator",
-                    Company = "ProjectX",
+                    Company = "Blink",
                     Industry = "Webmastering",
                     WorkingSince = DateTime.UtcNow,
                     IsParent = "No",
-                    WorkRoles = "Looking after the ProjectX website and ProjectX's presence on other platforms",
+                    WorkRoles = "Looking after the Blink website and Blink's presence on other platforms",
                     Strengths = "I have relentless determination, excellent time-management skills and a huge vocabulary!",
                     Joined = DateTime.UtcNow,
                     Biog = "My team of moderators and I are always willing to answer questions from members.  Use the contact form to get our attention."

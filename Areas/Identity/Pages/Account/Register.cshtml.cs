@@ -126,7 +126,7 @@ namespace ProjectX.Areas.Identity.Pages.Account
 
             [StringLength(1000)]
             [DataType(DataType.MultilineText)]
-            [Display(Name = "Anything else you’d like to add")]
+            [Display(Name = "Anything else you’d like to add for your public profile")]
             public string Biog { get; set; }
             
             [Required]
@@ -144,6 +144,10 @@ namespace ProjectX.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name = "I agree to abide by the Blink site rules")]
+            [Range(typeof(bool), "true", "true", ErrorMessage = "To successfully register you must accept the Blink site rules.")]
+            public bool HasAccepted { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)

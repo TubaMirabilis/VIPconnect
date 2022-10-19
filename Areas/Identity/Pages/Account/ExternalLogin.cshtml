@@ -106,11 +106,41 @@
                 <input asp-for="Input.Biog" class="form-control" />
                 <span asp-validation-for="Input.Biog" class="text-danger"></span>
             </div>
+            <div class="col-12 form-group mb-3">
+                <p>New members of the Blink community must agree to abide by the <a class="text-decoration-none" asp-controller="Home" asp-action="Rules">site rules</a>.</p>
+                <ul>
+                    <li>Do not bully or harass other members of the Blink community.</li>
+                    <li>Respond promptly to any request from the Blink community moderators.</li>
+                    <li>Do not post confidential information about anybody without explicit permission.</li>
+                    <li>Search for similar discussions before submitting a new one for members' responses.</li>
+                </ul>
+            </div>
+            <div class="col-12 form-check mb-3">
+                <input asp-for="Input.HasAccepted" type="checkbox" class="form-check-input" />
+                <label class="form-check-label" asp-for="Input.HasAccepted"></label>
+                <br />
+                <span asp-validation-for="Input.HasAccepted" class="text-danger"></span>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Register</button>
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary px-6">Register</button>
+        </div>
     </form>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // extend range validator method to treat checkboxes differently
+        var defaultRangeValidator = $.validator.methods.range;
+        $.validator.methods.range = function(value, element, param) {
+            if(element.type === 'checkbox') {
+                // if it's a checkbox return true if it is checked
+                return element.checked;
+            } else {
+                // otherwise run the default validation function
+                return defaultRangeValidator.call(this, value, element, param);
+            }
+        }
+    </script>
 }

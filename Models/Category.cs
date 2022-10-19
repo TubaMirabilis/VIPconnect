@@ -11,6 +11,7 @@ namespace ProjectX.Models
         [Required]
         public string Description { get; set; }
         public string ImageSrc { get; set; }
+        public bool StaffOnly { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

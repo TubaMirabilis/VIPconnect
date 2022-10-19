@@ -126,8 +126,11 @@ namespace ProjectX.Areas.Identity.Pages.Account
 
             [StringLength(1000)]
             [DataType(DataType.MultilineText)]
-            [Display(Name = "Anything else you’d like to add")]
+            [Display(Name = "Anything else you’d like to add for your public profile")]
             public string Biog { get; set; }
+            [Display(Name = "I agree to abide by the Blink site rules")]
+            [Range(typeof(bool), "true", "true", ErrorMessage = "To successfully register you must accept the Blink site rules.")]
+            public bool HasAccepted { get; set; }
         }
 
         public IActionResult OnGetAsync()

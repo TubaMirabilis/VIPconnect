@@ -228,6 +228,13 @@ namespace ProjectX.Controllers
                     Text = c.Name
                 });
             }
+            if(categories.Any(x => x.Name == discussion.Category && x.StaffOnly == true))
+            {
+                if(!User.IsInRole("Moderator") && !User.IsInRole("Administrator"))
+                {
+                    return Forbid();
+                }
+            }
             if (ModelState.IsValid)
             {
                 discussion.Id = Guid.NewGuid();
@@ -394,16 +401,24 @@ namespace ProjectX.Controllers
         {
             //To do this I need an ApplicationUser object:
             var query = await _userManager.FindByNameAsync(user);
-            var claims = await _userManager.GetClaimsAsync(query);
-            //Everyone with the "TwitterId" claim should have an avatar provided by Twitter:
-            if(!claims.Any(c => c.Type == "TwitterId"))
+            if(query != null)
             {
-                //No claim
-                return "";
+                var claims = await _userManager.GetClaimsAsync(query);
+                //Everyone with the "TwitterId" claim should have an avatar provided by Twitter:
+                if(!claims.Any(c => c.Type == "TwitterId"))
+                {
+                    //No claim
+                    return "";
+                }
+                else
+                {
+                    return await _twitterClient.GetImageAsync(claims.FirstOrDefault(c => c.Type == "TwitterId").Value);
+                }
             }
+            //In case the user deleted their account
             else
             {
-                return await _twitterClient.GetImageAsync(claims.FirstOrDefault(c => c.Type == "TwitterId").Value);
+                return "";
             }
         }
         public IEnumerable<int> PageNumbers(int pageNumber, int pageCount)

@@ -1,70 +1,92 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.AspNetCore.Identity
+@using Newtonsoft.Json
 @inject SignInManager<ApplicationUser> SignInManager
+@{
+  var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+  var showBanner = !consentFeature?.CanTrack ?? false;
+  var cookieString = consentFeature?.CreateConsentCookie();
+}
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ProjectX</title>
+    <title>@ViewData["Title"] - The Blink Network</title>
     <link rel="stylesheet" href="~/css/bootstrap.custom.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-</head>
-<body class="d-flex flex-column min-vh-100">
-    <header class="header">
-        <div class="overlay"></div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-            <div class="container-sm">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                  <img src="@Url.Content("~/img/logo.jpg")" alt="Blink"/>
-                </a>
-                <button class="navbar-toggler hamburger-button" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <div class="animated-icon"><span></span><span></span><span></span></div>
-                </button>
-                <div class="collapse navbar-collapse justify-content-between align-center text-center header__menu" id="main-nav">
-                    <ul class="navbar-nav justify-content-center flex-grow-0 flex-sm-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item position-relative">
-                          <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                            Forums
-                          </a>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            @await Component.InvokeAsync("ForumsList")
-                          </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="About">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Rules">Rules</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Blog">Blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Support" asp-action="Index">Support</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="mb-5">
-            @RenderBody()
-        </main>
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <div class="modal fade" id="cookieConsent" tabindex="-1" aria-labelledby="cookieConsent" aria-hidden="true" aria-modal="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title">This website uses cookies</h5>
+          </div>
+          <div class="modal-body">
+            The Blink website uses persistent cookies to provide essential functions such as user authentication.
+            <br/><br/>
+            The Blink cookies can be erased at any time in your browser settings.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-cookie-string="@cookieString">Accept Cookies</button>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <footer class="footer mt-auto">
-        <div class="container">
+    <header id="header" class="header">
+      <div class="overlay"></div>
+      <nav class="navbar navbar-expand-lg border-bottom">
+        <div class="container-sm">
+          <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+            <img src="@Url.Content("~/img/logo.png")" alt="Blink"/>
+          </a>
+          <button class="navbar-toggler hamburger-button" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <div class="animated-icon"><span></span><span></span><span></span></div>
+          </button>
+          <div class="collapse navbar-collapse justify-content-between align-center text-center header__menu" id="main-nav">
+            <ul class="navbar-nav justify-content-center flex-grow-0 flex-sm-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item position-relative">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    Forums
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    @await Component.InvokeAsync("ForumsList")
+                  </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="About">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Rules">Rules</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Blog">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Support" asp-action="Index">Support</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </li>
+            </ul>
+            <partial name="_LoginPartial" />
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div id="main" class="container">
+      <main role="main" class="mb-5">
+          @RenderBody()
+      </main>
+    </div>
+    <footer id="footer" class="footer mt-auto">
+      <div class="container">
         <a class="footer__logo display-3 bg-light text-primary pb-2" href="#">
-          <img src="/img/logo.jpg" />
+          <img src="/img/logo.png" />
         </a>
         <div class="footer__social">
           <a href="#">
@@ -118,6 +140,26 @@
     <script src="~/js/signalr/dist/browser/jquery.signalR.min.js"></script>
     <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+      if(@JsonConvert.SerializeObject(showBanner)) {
+        $(window).on('load', function() {
+          $('#cookieConsent').modal('show');
+          $('#header').attr("aria-hidden", "true");
+          $('#main').attr("aria-hidden", "true");
+          $('#footer').attr("aria-hidden", "true");
+        });
+      }
+      (function () {
+          var button = document.querySelector("#cookieConsent button[data-cookie-string]");
+          button.addEventListener("click", function (event) {
+              document.cookie = button.dataset.cookieString;
+              $('#cookieConsent').modal('hide');
+              $('#header').attr("aria-hidden", "false");
+              $('#main').attr("aria-hidden", "false");
+              $('#footer').attr("aria-hidden", "false");
+          }, false);
+      })();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
-</body>
+  </body>
 </html>

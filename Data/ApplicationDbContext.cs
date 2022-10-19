@@ -30,6 +30,7 @@ namespace ProjectX.Data
                 Name = "Introductions",
                 Description = "Newcomers should divulge their innermost secrets in this forum.",
                 ImageSrc = "introductions.svg",
+                StaffOnly = false,
                 DateCreated = DateTime.UtcNow
             }, new Category
             {
@@ -37,6 +38,7 @@ namespace ProjectX.Data
                 Name = "The Office",
                 Description = "For professionals to discuss professional stuff.",
                 ImageSrc = "office.svg",
+                StaffOnly = false,
                 DateCreated = DateTime.UtcNow
             }, new Category
             {
@@ -44,6 +46,7 @@ namespace ProjectX.Data
                 Name = "Job-hunting",
                 Description = "For job application advice.",
                 ImageSrc = "hunting.svg",
+                StaffOnly = false,
                 DateCreated = DateTime.UtcNow
             }, new Category
             {
@@ -51,6 +54,7 @@ namespace ProjectX.Data
                 Name = "Access to Work",
                 Description = "A forum for discussing the UK Government scheme of the same name.",
                 ImageSrc = "universal-access-circle.svg",
+                StaffOnly = false,
                 DateCreated = DateTime.UtcNow
             }, new Category
             {
@@ -58,6 +62,15 @@ namespace ProjectX.Data
                 Name = "Parents' Zone",
                 Description = "For parents to discuss maternal/paternal stuff.",
                 ImageSrc = "parents-child.svg",
+                StaffOnly = false,
+                DateCreated = DateTime.UtcNow
+            }, new Category
+            {
+                Id = Guid.NewGuid(),
+                Name = "Latest News",
+                Description = "For staff to provide updates as tthe Blink community grows",
+                ImageSrc = "news.svg",
+                StaffOnly = true,
                 DateCreated = DateTime.UtcNow
             }, new Category
             {
@@ -65,6 +78,7 @@ namespace ProjectX.Data
                 Name = "College Library",
                 Description = "For students to discuss matters pertaining to academic life.",
                 ImageSrc = "students.svg",
+                StaffOnly = false,
                 DateCreated = DateTime.UtcNow
             });
         }

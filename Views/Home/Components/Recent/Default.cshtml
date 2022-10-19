@@ -13,17 +13,27 @@
     @foreach (var item in Model)
     {
         var user = await UserManager.FindByNameAsync(item.Creator);
-        var claims = await UserManager.GetClaimsAsync(user);
         <div class="d-flex border border-dark rounded px-4">
-            @if(claims.Any(c => c.Type == "TwitterId"))
+            @if(user != null)
             {
+                var claims = await UserManager.GetClaimsAsync(user);
+                @if(claims.Any(c => c.Type == "TwitterId"))
+                {
                 var src = await TwitterClient.GetImageAsync(claims.FirstOrDefault(c => c.Type == "TwitterId").Value);
                 <img class="flex-shrink-0 align-self-center rounded-circle feature__circle" src="@src" />
+                }
+                else
+                {
+                <div class="position-relative flex-shrink-0 align-self-center bg-primary rounded-circle feature__circle feature__circle--lg">
+                    <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle rounded-circle display-5 text-light font-monospace">@Html.DisplayFor(modelItem => item.Creator[0])</div>
+                </div>
+                }
             }
+            @* In case the user deleted their account *@
             else
             {
-            <div class="position-relative flex-shrink-0 align-self-center bg-primary rounded-circle feature__circle">
-                <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle rounded-circle display-4 text-light font-monospace">@Html.DisplayFor(modelItem => item.Creator[0])</div>
+            <div class="position-relative flex-shrink-0 align-self-center bg-primary rounded-circle feature__circle feature__circle--lg">
+                <div role="img" alt="" class="position-absolute top-50 start-50 translate-middle rounded-circle display-5 text-light font-monospace">@Html.DisplayFor(modelItem => item.Creator[0])</div>
             </div>
             }
             <div class="ms-4">

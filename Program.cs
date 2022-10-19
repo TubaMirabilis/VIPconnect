@@ -10,30 +10,31 @@ using ProjectX.Data;
 using ProjectX.Hubs;
 using ProjectX.Models;
 using Tweetinvi;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using ProjectX.Services;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables(prefix: "PROJECTX_");
-// builder.Services.Configure<CookiePolicyOptions>(options =>
-// {
-//     options.MinimumSameSitePolicy = SameSiteMode.Lax;
-// });
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // This lambda determines whether user consent for non-essential 
+    // cookies is needed for a given request.
+    options.CheckConsentNeeded = context => true;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
 var connectionstring = builder.Configuration["Authentication:AzureSQL:ConnectionString"];
 var client = new TwitterClient(builder.Configuration["Authentication:Twitter:ConsumerAPIKey"], builder.Configuration["Authentication:Twitter:ConsumerSecret"]);
 await client.Auth.InitializeClientBearerTokenAsync();
-if(builder.Environment.IsDevelopment())
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    {
-        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-    });
-}
-else
-{
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    {
-        options.UseSqlServer(connectionstring);
-    });
-}
+    options.UseSqlServer(connectionstring);
+});
+// For local testing
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+// {
+    // options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+// });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -41,7 +42,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireDigit = false;
-    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedAccount = true;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
 })
 .AddRoles<IdentityRole>()
@@ -80,6 +81,16 @@ builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<TwitterClient>(client);
+builder.Services.AddTransient<IEmailSender, MailKitEmailSender>();
+builder.Services.Configure<MailKitEmailSenderOptions>(options =>
+{
+    options.Host_Address = builder.Configuration["Authentication:SMTP:HostAddress"];
+    options.Host_Port = 587;
+    options.Host_Username = builder.Configuration["Authentication:SMTP:HostUserName"];
+    options.Host_Password = builder.Configuration["Authentication:SMTP:HostPassword"];
+    options.Sender_EMail = "admin@theblink.network";
+    options.Sender_Name = "admin@theblink.network";
+});
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -103,6 +114,7 @@ else
 }
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseCookiePolicy();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

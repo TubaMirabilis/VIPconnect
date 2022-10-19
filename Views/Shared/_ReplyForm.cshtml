@@ -13,7 +13,7 @@
         <input asp-for="Respondent" type="hidden" />
         <div class="row px-3" style="height: 3.5rem">
             <div class="d-none d-sm-flex justify-content-end align-items-center col-2">
-                @* If the user has the TwitterId claim try to show their twitter profile image, otherwise show the standard ProjectX alphabet badge: *@
+                @* If the user has the TwitterId claim try to show their twitter profile image, otherwise show the standard Blink alphabet badge: *@
                 @if(!string.IsNullOrEmpty(User.FindFirstValue("TwitterId")))
                 {
                 var src = await TwitterClient.GetImageAsync(User.FindFirstValue("TwitterId"));

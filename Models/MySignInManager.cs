@@ -18,11 +18,15 @@ namespace ProjectX.Models
             bool isPersistent, bool lockoutOnFailure)
         {
             var user = await UserManager.FindByEmailAsync(userName);
+            var canSignIn = await this.CanSignInAsync(user);
             if (user == null)
             {
                 return SignInResult.Failed;
             }
-            
+            if(!canSignIn)
+            {
+                return SignInResult.NotAllowed;
+            }
             return await PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure);
         }
     }

@@ -29,6 +29,10 @@ namespace ProjectX.Controllers
             var pageSize = 10;
             //I need an ApplicationUser object:
             var query = await _userManager.FindByNameAsync(user);
+            if(query == null)
+            {
+                return NotFound();
+            }
             var id = await _userManager.GetUserIdAsync(query);
             //I'll be checking for the "TwitterID" claim later:
             var claims = await _userManager.GetClaimsAsync(query);
